@@ -1,0 +1,7 @@
+<!-- BEGIN_INCLUDE(stripemuleconnector:create-account) -->
+    <stripemuleconnector:create-account apiKey="${stripe.api.key}" email="#[message.payload.email]" cardId="#[message.payload.cardId]" />
+<!-- END_INCLUDE(stripemuleconnector:create-account) -->
+
+<!-- BEGIN_INCLUDE(stripemuleconnector:create-credit-card) -->
+    <stripemuleconnector:create-credit-card apiKey="${stripe.api.key}" number="#[message.payload.card.number]" expMonth="#[message.payload.card.exp_month]" expYear="#[message.payload.card.exp_year]" cvc="#[message.payload.card.cvc]" />
+<!-- END_INCLUDE(stripemuleconnector:create-credit-card) -->

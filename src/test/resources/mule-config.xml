@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:stripemuleconnector="http://www.mulesoft.org/schema/mule/stripemuleconnector"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://cxf.apache.org/configuration/beans http://cxf.apache.org/schemas/configuration/cxf-beans.xsd
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.mulesoft.org/schema/mule/stripemuleconnector http://www.mulesoft.org/schema/mule/stripemuleconnector/current/mule-stripemuleconnector.xsd">
+
+	<beans:bean
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<beans:property name="locations">
+			<beans:list>
+				<beans:value>classpath:spring/default.properties</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<flow name="createAccount">
+		<stripemuleconnector:create-account
+			apiKey="${stripe.api.key}" email="#[message.payload.email]" cardId="#[message.payload.cardId]" />
+	</flow>
+
+	<flow name="createCreditCard">
+		<stripemuleconnector:create-credit-card
+			apiKey="${stripe.api.key}" number="#[message.payload.card.number]"
+			expYear="#[message.payload.card.exp_year]" expMonth="#[message.payload.card.exp_month]"
+			cvc="#[message.payload.card.cvc]" />
+	</flow>
+
+	<flow name="deleteAccount">
+		<stripemuleconnector:delete-customer
+			apiKey="${stripe.api.key}" customerId="#[message.payload]" />
+	</flow>
+	
+	<flow name="listPlans">
+		<stripemuleconnector:list-plans
+			apiKey="${stripe.api.key}"/>
+	</flow>
+
+</mule>
